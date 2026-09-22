@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>INTERA Health Monitoring Demo</title>
+  <link rel="stylesheet" href="styles.css?v=interfaces-v2" />
+</head>
+<body>
+  <main class="demo-shell">
+    <header class="topbar">
+      <div>
+        <div class="brand"><img src="assets/intera-logo.webp" alt="INTERA — Seamless AI" width="614" height="128" /></div>
+        <div class="subtitle" id="interfaceSubtitle">HEALTH MONITORING SYSTEM</div>
+      </div>
+
+      <div class="top-actions">
+        <span class="live-badge"><span class="dot"></span> LIVE DEMO</span>
+        <button id="fullscreenBtn">Fullscreen</button>
+      </div>
+    </header>
+
+
+    <div id="healthPanel" aria-label="Health interface">
+    <section class="intro" aria-labelledby="pageTitle">
+      <div>
+        <div class="section-label">CONTACTLESS SENSING / REAL-TIME INTELLIGENCE</div>
+        <h1 id="pageTitle">Contactless<br /><span>Health Monitoring</span></h1>
+        <p>From mmWave signals to health insights. AI at the edge.</p>
+        <nav class="interface-switcher" aria-label="Switch interface"><a class="interface-link" href="index.html?view=interfaces-v2" aria-current="page">Health</a><a class="interface-link" href="bms.html?view=interfaces-v2">BMS</a><a class="interface-link" href="eagle.html?view=interfaces-v2">Eagle</a></nav>
+      </div>
+      <div class="system-mark" aria-hidden="true"><span>AI</span><small>EDGE INTELLIGENCE</small></div>
+    </section>
+
+    <section class="overview" aria-label="Live health signals">
+      <div class="patient-card card">
+        <div class="section-label"><span class="section-number">01</span> mmWave sensing</div>
+
+        <div class="person-wrap">
+          <div class="person">
+            <div class="head"></div>
+            <div class="body"></div>
+          </div>
+
+          <div class="radar">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        </div>
+
+        <div class="sensor-status">
+          <span class="status-dot"></span>
+          <span id="sensorText">Target detected</span>
+        </div>
+      </div>
+
+      <div class="metrics-grid">
+        <article class="metric-card card">
+          <div class="metric-name"><span class="metric-symbol" aria-hidden="true">♡</span> Heart rate</div>
+          <div class="metric-value"><span id="heartRate">72</span> <small>bpm</small></div>
+          <div class="wave wave-heart"></div>
+        </article>
+
+        <article class="metric-card card">
+          <div class="metric-name"><span class="metric-symbol" aria-hidden="true">≈</span> Respiration rate</div>
+          <div class="metric-value"><span id="respRate">15</span> <small>rpm</small></div>
+          <div class="wave wave-resp"></div>
+        </article>
+
+        <article class="metric-card card">
+          <div class="metric-name"><span class="metric-symbol" aria-hidden="true">▥</span> Signal quality</div>
+          <div class="metric-value"><span id="signalQuality">94</span><small>%</small></div>
+          <div class="quality-track">
+            <div id="qualityBar" class="quality-bar"></div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="comparison">
+      <div class="comparison-heading">
+        <div>
+          <div class="section-label"><span class="section-number">02</span> AI inference comparison</div>
+          <h2>Edge <span>vs</span> Cloud</h2>
+        </div>
+        <p>Same health signal. Different response time.</p>
+      </div>
+
+      <div class="comparison-grid">
+        <article class="compute-panel edge-panel card">
+          <div class="panel-header">
+            <div>
+              <span class="eyebrow">LOCAL PROCESSING</span>
+              <h3>EDGE</h3>
+            </div>
+            <span class="latency-chip">1X · Baseline</span>
+          </div>
+
+          <div class="processing-box">
+            <div class="processing-heading">
+              <span id="edgeStatus">Processing</span>
+              <strong id="edgePercent">0%</strong>
+            </div>
+            <div class="processing-track" id="edgeProgress" role="progressbar" aria-label="Edge processing" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+              <div class="processing-fill" id="edgeProgressFill"></div>
+            </div>
+            <div class="processing-time">
+              <span>Elapsed time</span>
+              <time id="edgeElapsed">0.00 s</time>
+            </div>
+          </div>
+
+          <div class="network" id="edgeNetwork" aria-label="Edge AI neural network">
+            <div class="layer">
+              <span class="node"></span><span class="node"></span><span class="node"></span>
+            </div>
+            <div class="layer">
+              <span class="node"></span><span class="node"></span><span class="node"></span>
+            </div>
+            <div class="layer">
+              <span class="node"></span><span class="node"></span><span class="node"></span>
+            </div>
+          </div>
+
+          <div class="result-box">
+            <span>Health insight</span>
+            <strong id="edgeResult">95</strong>
+          </div>
+
+          <div class="response-row">
+            <span>Processing time*</span>
+            <strong id="edgeTime">0.30 s</strong>
+          </div>
+        </article>
+
+        <article class="compute-panel cloud-panel card">
+          <div class="panel-header">
+            <div>
+              <span class="eyebrow">REMOTE PROCESSING</span>
+              <h3>CLOUD</h3>
+            </div>
+            <span class="latency-chip muted">528X · Processing time</span>
+          </div>
+
+          <div class="processing-box">
+            <div class="processing-heading">
+              <span id="cloudStatus">Processing</span>
+              <strong id="cloudPercent">0%</strong>
+            </div>
+            <div class="processing-track" id="cloudProgress" role="progressbar" aria-label="Cloud processing" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+              <div class="processing-fill" id="cloudProgressFill"></div>
+            </div>
+            <div class="processing-time">
+              <span>Elapsed time</span>
+              <time id="cloudElapsed">0.00 s</time>
+            </div>
+          </div>
+
+          <div class="network" id="cloudNetwork" aria-label="Cloud AI neural network">
+            <div class="layer">
+              <span class="node"></span><span class="node"></span><span class="node"></span>
+            </div>
+            <div class="layer">
+              <span class="node"></span><span class="node"></span><span class="node"></span>
+            </div>
+            <div class="layer">
+              <span class="node"></span><span class="node"></span><span class="node"></span>
+            </div>
+          </div>
+
+          <div class="result-box">
+            <span>Health insight</span>
+            <strong id="cloudResult">95</strong>
+          </div>
+
+          <div class="response-row">
+            <span>Processing time*</span>
+            <strong id="cloudTime">158.40 s</strong>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <footer>
+      <div class="flow">
+        <span>mmWave Radar</span>
+        <b>→</b>
+        <span>Signal Processing</span>
+        <b>→</b>
+        <span>Falcon Cognit</span>
+        <b>→</b>
+        <span>Health Insight</span>
+      </div>
+      <small>*Simulated data and timing for demonstration purposes. Node animations are illustrative. Final metrics must be technically validated.</small>
+    </footer>
+    </div>
+
+  </main>
+
+  <script src="app.js?v=eagle-v1"></script>
+</body>
+</html>

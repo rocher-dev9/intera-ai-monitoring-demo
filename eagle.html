@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>INTERA · Eagle Accelerator</title>
+  <link rel="stylesheet" href="styles.css?v=interfaces-v2" />
+  <link rel="stylesheet" href="eagle.css?v=eagle-v11" />
+</head>
+<body class="eagle-page">
+  <main class="demo-shell">
+    <header class="topbar">
+      <div><div class="brand"><img src="assets/intera-logo.webp" alt="INTERA — Seamless AI" width="614" height="128" /></div><div class="subtitle">NEAR MEMORY COMPUTING ACCELERATOR</div></div>
+      <div class="top-actions"><span class="live-badge"><span class="dot"></span> DEMO</span><button id="fullscreenBtn" type="button">Fullscreen</button></div>
+    </header>
+    <section class="intro eagle-intro" aria-labelledby="eagleTitle">
+      <div><div class="section-label">COMPUTE ACCELERATION / CPU COMPARISON</div><h1 id="eagleTitle">Eagle<span>Near memory computing</span></h1><p>Two workloads. One CPU baseline. Acceleration at a glance.</p><nav class="interface-switcher" aria-label="Switch interface"><a class="interface-link" href="index.html?view=interfaces-v2">Health</a><a class="interface-link" href="bms.html?view=interfaces-v2">BMS</a><a class="interface-link" href="eagle.html?view=interfaces-v2" aria-current="page">Eagle</a></nav></div>
+      <div class="system-mark" aria-hidden="true"><span>AI</span><small>EAGLE ACCELERATOR</small></div>
+    </section>
+    <div class="gauge-toolbar"><div><span class="status-dot"></span><span>Time reference <strong>CPU = seconds · EAGLE ACC = milliseconds</strong></span></div><button id="motionToggle" type="button" aria-pressed="false">Pause needles</button></div>
+
+    <section class="card configuration" aria-labelledby="configOneTitle">
+      <div class="config-info"><div class="section-label">CONFIGURATION 01</div><h2 id="configOneTitle">Matrix × vector</h2><div class="operation" aria-hidden="true">M <span>×</span> V</div><dl class="config-specs"><div><dd>16 <small>PE</small></dd></div><div><dd>117 <small>TOPS/MHz</small></dd></div></dl><div class="config-gain"><strong>528<small>×</small></strong></div></div>
+      <article class="gauge-panel cpu-panel"><div class="gauge-heading"><h3>CPU</h3><span>BASELINE</span></div><svg class="speed-gauge" data-tone="cpu" role="img" aria-label="Configuration 1 CPU time reference in seconds: 0.50, 1.00, 1.50, 2.00, 2.50." viewBox="0 0 360 320"></svg><p class="gauge-caption">CPU SECONDS TIME REFERENCE</p></article>
+      <article class="gauge-panel accelerator-panel"><div class="gauge-heading"><h3>EAGLE <small>ACC</small></h3><span>ACCELERATED</span></div><svg class="speed-gauge" data-tone="accelerator" role="img" aria-label="Configuration 1 Eagle accelerator progressive time reference in milliseconds: 0.00, 5.00, 10.00, 15.00, 20.00, 25.00." viewBox="0 0 360 320"></svg><p class="gauge-caption">EAGLE ACC time reference · milliseconds</p></article>
+    </section>
+
+    <section class="card configuration" aria-labelledby="configTwoTitle">
+      <div class="config-info"><div class="section-label">CONFIGURATION 02</div><h2 id="configTwoTitle">Matrix × matrix</h2><div class="operation" aria-hidden="true">M <span>×</span> M</div><dl class="config-specs"><div><dd>16 <small>PE</small></dd></div><div><dd>108 <small>TOPS/MHz</small></dd></div></dl><div class="config-gain"><strong>490<small>×</small></strong></div></div>
+      <article class="gauge-panel cpu-panel"><div class="gauge-heading"><h3>CPU</h3><span>BASELINE</span></div><svg class="speed-gauge" data-tone="cpu" role="img" aria-label="Configuration 2 CPU time reference in seconds: 0.50, 1.00, 1.50, 2.00, 2.50." viewBox="0 0 360 320"></svg><p class="gauge-caption">CPU SECONDS TIME REFERENCE</p></article>
+      <article class="gauge-panel accelerator-panel"><div class="gauge-heading"><h3>EAGLE <small>ACC</small></h3><span>ACCELERATED</span></div><svg class="speed-gauge" data-tone="accelerator" role="img" aria-label="Configuration 2 Eagle accelerator progressive time reference in milliseconds: 0.00, 5.00, 10.00, 15.00, 20.00, 25.00." viewBox="0 0 360 320"></svg><p class="gauge-caption">EAGLE ACC time reference · milliseconds</p></article>
+    </section>
+    <div class="scale-note"><span class="section-label">READING THE GAUGES</span><p>All four needles move together from zero to their target, return to zero, hold for five seconds, and restart. CPU reaches 1.50 seconds; EAGLE ACC reaches 25.00 milliseconds.</p></div>
+    <footer><div class="flow"><span>CPU baseline</span><b>→</b><span>Near memory computing</span><b>→</b><span>Eagle acceleration</span></div><small>Values reproduce the supplied sketch; this is a visual demo, not a live benchmark. Energy figures were not supplied.</small></footer>
+  </main>
+  <script src="eagle.js?v=eagle-v11"></script>
+</body>
+</html>
