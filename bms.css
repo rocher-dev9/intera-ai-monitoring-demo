@@ -96,3 +96,33 @@ i.legend-ai { border-color: #52d6ff; } i.legend-reference { border-color: #e1ebf
 .output-table td { white-space: nowrap; }
 .phase-labels { gap: 10px; line-height: 1.5; }
 @media (max-width:720px) { .bms-summary .summary-value { font-size: 30px; } .bms-summary .summary-value small { font-size: 12px; margin-left: 4px; } .output-table { min-width: 460px; } }
+
+.bms-video-frame {
+  margin: 20px 0 0;
+  padding: 12px;
+  border: 1px solid var(--line);
+  background: #020d1c;
+}
+
+.bms-demo-video {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1580 / 946;
+  min-height: 280px;
+  border: 1px solid #214361;
+  background: #010814;
+  object-fit: contain;
+}
+
+.bms-video-frame figcaption {
+  margin-top: 10px;
+  color: #8aa5bf;
+  font-size: 10px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+@media (max-width: 720px) {
+  .bms-video-frame { padding: 8px; }
+  .bms-demo-video { min-height: 0; }
+}
