@@ -1,17 +1,13 @@
 const heartRateEl = document.getElementById("heartRate");
 const respRateEl = document.getElementById("respRate");
+const dataHeartRateEl = document.getElementById("dataHeartRate");
+const dataRespRateEl = document.getElementById("dataRespRate");
 const signalQualityEl = document.getElementById("signalQuality");
 const qualityBar = document.getElementById("qualityBar");
 const sensorText = document.getElementById("sensorText");
-
-const edgeNodes = [...document.querySelectorAll("#edgeNetwork .node")];
-const cloudNodes = [...document.querySelectorAll("#cloudNetwork .node")];
-const edgeResult = document.getElementById("edgeResult");
-const cloudResult = document.getElementById("cloudResult");
 const fullscreenBtn = document.getElementById("fullscreenBtn");
 
-const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
-let respirationRate = 15;
+const respirationRate = { value: 15 };
 
 function randomAround(base, variation) {
   const min = base - variation;
@@ -20,107 +16,75 @@ function randomAround(base, variation) {
 }
 
 function updateVitals() {
-  const hr = randomAround(95, 25);
-  const rr = respirationRate;
-  const sq = randomAround(94, 2);
+  const heartRate = randomAround(95, 25);
+  const signalQuality = randomAround(94, 2);
+  const rr = respirationRate.value;
 
-  heartRateEl.textContent = hr;
-  heartRateEl.classList.toggle("high", hr > 100);
+  heartRateEl.textContent = heartRate;
+  dataHeartRateEl.textContent = heartRate;
+  heartRateEl.classList.toggle("high", heartRate > 100);
+  dataHeartRateEl.classList.toggle("high", heartRate > 100);
+
   respRateEl.textContent = rr;
+  dataRespRateEl.textContent = rr;
   respRateEl.classList.toggle("high", rr > 20);
-  // Increase gradually, then hold at 22 rpm to demonstrate the red state.
-  respirationRate = Math.min(rr + 1, 22);
-  signalQualityEl.textContent = sq;
-  qualityBar.style.width = `${sq}%`;
+  dataRespRateEl.classList.toggle("high", rr > 20);
+
+  signalQualityEl.textContent = signalQuality;
+  qualityBar.style.width = `${signalQuality}%`;
+
+  // Let the demo show the high respiration state after the normal baseline.
+  respirationRate.value = Math.min(rr + 1, 22);
 }
 
 setInterval(updateVitals, 1400);
 
-// Simulated processing durations. Cloud takes exactly 528 times as long.
-const EDGE_PROCESSING_MS = 300;
-const CLOUD_PROCESSING_MS = EDGE_PROCESSING_MS * 528;
-const EDGE_NODE_INTERVAL_MS = 110 * 3;
-const CLOUD_NODE_INTERVAL_MS = 420;
+const EDGE_DURATION_MS = 3000;
+const CLOUD_DURATION_MS = 7000;
 
-function createProcessor(name, nodes, result, duration, nodeInterval) {
+function createProcessor(name, duration, target) {
+  const nodes = [...document.querySelectorAll(`#${name}Network .node`)];
   return {
-    nodes, result, duration, nodeInterval,
-    progress: document.getElementById(`${name}Progress`),
-    fill: document.getElementById(`${name}ProgressFill`),
-    percent: document.getElementById(`${name}Percent`),
+    nodes,
+    duration,
+    target,
     status: document.getElementById(`${name}Status`),
-    elapsed: document.getElementById(`${name}Elapsed`),
-    // The illustrative node sequence completes even when inference is faster.
-    visualDuration: Math.max(duration, nodes.length * nodeInterval),
+    load: document.getElementById(`${name}LoadFill`),
+    progress: document.getElementById(`${name}LoadProgress`),
   };
 }
 
-const edgeProcessor = createProcessor("edge", edgeNodes, edgeResult, EDGE_PROCESSING_MS, EDGE_NODE_INTERVAL_MS);
-const cloudProcessor = createProcessor("cloud", cloudNodes, cloudResult, CLOUD_PROCESSING_MS, CLOUD_NODE_INTERVAL_MS);
+const edgeProcessor = createProcessor("edge", EDGE_DURATION_MS, 90);
+const cloudProcessor = createProcessor("cloud", CLOUD_DURATION_MS, 95);
 
 function resetProcessor(processor) {
+  processor.load.style.width = "0%";
   processor.progress.setAttribute("aria-valuenow", "0");
-  processor.fill.style.width = "0%";
-  processor.percent.textContent = "0%";
-  processor.status.textContent = "Waiting for signal";
-  processor.elapsed.textContent = "0.00 s";
-  processor.result.textContent = "…";
-  processor.result.classList.remove("visible");
+  processor.status.textContent = "Processing";
   processor.nodes.forEach(node => node.classList.remove("active"));
 }
 
 function renderProcessor(processor, elapsed) {
-  const processingElapsed = Math.min(elapsed, processor.duration);
-  const percent = Math.floor(processingElapsed / processor.duration * 100);
-  const complete = elapsed >= processor.duration;
-  processor.fill.style.width = `${percent}%`;
-  processor.progress.setAttribute("aria-valuenow", String(percent));
-  processor.percent.textContent = `${percent}%`;
-  processor.status.textContent = complete ? "Complete" : "Processing";
-  processor.elapsed.textContent = `${(processingElapsed / 1000).toFixed(2)} s`;
-  if (complete) {
-    processor.result.textContent = "95";
-    processor.result.classList.add("visible");
-  }
+  const cycleElapsed = elapsed % processor.duration;
+  const progress = cycleElapsed / processor.duration;
+  const value = Math.round(progress * processor.target);
+  processor.load.style.width = `${value}%`;
+  processor.progress.setAttribute("aria-valuenow", String(value));
+  processor.status.textContent = "Processing";
 
-  const activeIndex = elapsed < processor.visualDuration
-    ? Math.floor(elapsed / processor.nodeInterval) % processor.nodes.length
+  const activeIndex = processor.nodes.length
+    ? Math.floor(progress * processor.nodes.length) % processor.nodes.length
     : -1;
   processor.nodes.forEach((node, index) => node.classList.toggle("active", index === activeIndex));
 }
 
-function animateProcessor(processor, startedAt) {
-  return new Promise(resolve => {
-    function frame(now) {
-      const elapsed = Math.max(0, now - startedAt);
-      renderProcessor(processor, elapsed);
-      if (elapsed < processor.visualDuration) {
-        requestAnimationFrame(frame);
-      } else {
-        resolve();
-      }
-    }
+function animateProcessor(processor) {
+  const startedAt = performance.now();
+  function frame(now) {
+    renderProcessor(processor, Math.max(0, now - startedAt));
     requestAnimationFrame(frame);
-  });
-}
-
-async function runDemoLoop() {
-  while (true) {
-    sensorText.textContent = "Acquiring signal...";
-    resetProcessor(edgeProcessor);
-    resetProcessor(cloudProcessor);
-    await sleep(1200);
-
-    sensorText.textContent = "Signal acquired";
-    const startedAt = performance.now();
-    await Promise.all([
-      animateProcessor(edgeProcessor, startedAt),
-      animateProcessor(cloudProcessor, startedAt),
-    ]);
-    await sleep(3600);
-    sensorText.textContent = "Target detected";
-    await sleep(1000);
   }
+  requestAnimationFrame(frame);
 }
 
 fullscreenBtn.addEventListener("click", async () => {
@@ -134,17 +98,19 @@ fullscreenBtn.addEventListener("click", async () => {
 });
 
 document.addEventListener("fullscreenchange", () => {
-  if (!document.fullscreenElement) {
-    fullscreenBtn.textContent = "Fullscreen";
-  }
+  if (!document.fullscreenElement) fullscreenBtn.textContent = "Fullscreen";
 });
 
 updateVitals();
-runDemoLoop();
+sensorText.textContent = "Signal acquired";
+resetProcessor(edgeProcessor);
+resetProcessor(cloudProcessor);
+animateProcessor(edgeProcessor);
+animateProcessor(cloudProcessor);
 
-// Preserve links to the previous Eagle placeholder.
 function redirectLegacyEagle() {
   if (location.hash === "#eagle") location.replace("eagle.html");
 }
+
 window.addEventListener("hashchange", redirectLegacyEagle);
 redirectLegacyEagle();
