@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>INTERA · AI Powered BMS</title>
   <link rel="stylesheet" href="styles.css?v=interfaces-v2" />
-  <link rel="stylesheet" href="bms.css?v=bms-speed-v4" />
+  <link rel="stylesheet" href="bms.css?v=bms-video-v1" />
 </head>
 <body class="bms-page">
   <main class="demo-shell">
@@ -25,23 +25,18 @@
     </section>
     <div class="bms-workspace">
       <section class="card chart-panel" aria-labelledby="speedHeading">
-        <div class="chart-heading"><div><div class="section-label"><span class="section-number">01</span> OUTPUT SPEED COMPARISON</div><h2 id="speedHeading">How fast is the output ready?</h2></div><div class="chart-controls"><button id="pauseCycle" type="button">Pause</button><button id="replayCycle" type="button">Replay</button></div></div>
-        <p class="panel-description">SoC means remaining battery charge. Both methods return the same simulated 90.0% SoC output. Here, higher lines mean more outputs are ready.</p>
-        <div class="chart-legend"><span><i class="legend-ai"></i>INTERA AI</span><span><i class="legend-baseline"></i>Conventional Cloud</span></div>
-        <div class="chart-scroll" tabindex="0" role="region" aria-label="Output speed chart, scroll horizontally on small screens">
-          <svg id="socChart" viewBox="0 0 880 410" role="img" aria-labelledby="chartTitle chartDescription">
-            <title id="chartTitle">Output completion: INTERA AI and Conventional Cloud</title><desc id="chartDescription">INTERA AI finishes its visual sequence in 3000 milliseconds and Cloud in 7000 milliseconds. Blue and orange labels show simulated response latency, separate from playback time.</desc>
-            <g id="chartGrid"></g><path id="baselinePath" class="plot-baseline"/><path id="aiPath" class="plot-ai"/>
-            <g id="aiMarker"><circle r="6" fill="#52d6ff"/><g id="aiTag" class="speed-tag ai-tag"><rect width="142" height="30" rx="4"/><text x="10" y="20" id="aiTagText">0.00 ms</text></g></g>
-            <g id="cloudMarker"><circle r="6" fill="#e6af6b"/><g id="cloudTag" class="speed-tag cloud-tag"><rect width="174" height="30" rx="4"/><text x="10" y="20" id="cloudTagText">0 ms · 0.0 s</text></g></g>
-          </svg>
-        </div>
-        <p class="mobile-chart-hint">Swipe the chart horizontally to view the full comparison.</p>
-        <div class="cycle-scrubber"><label for="cycleTime">Playback time <strong id="cycleTimeLabel">0 / 7000 ms</strong></label><input id="cycleTime" type="range" min="0" max="7000" step="1" value="0" aria-label="Playback time in milliseconds"/><div class="phase-labels"><span>INTERA AI · 3000 ms</span><span>CLOUD · 7000 ms</span></div></div>
-        <p class="chart-note">Visual playback: 3 s / 7 s. Labels show simulated latency, not playback duration.</p>
+        <div class="chart-heading"><div><div class="section-label"><span class="section-number">01</span> OUTPUT SPEED COMPARISON</div><h2 id="speedHeading">How fast is the output ready?</h2></div></div>
+        <p class="panel-description">The BMS demonstrator video shows the battery output and telemetry view used for this comparison.</p>
+        <figure class="bms-video-frame">
+          <video id="bmsDemoVideo" class="bms-demo-video" autoplay loop muted playsinline controls preload="metadata" aria-label="BMS demonstrator video showing battery output and telemetry">
+            <source src="demo_bms.mp4" type="video/mp4" />
+            Your browser does not support MP4 video playback.
+          </video>
+          <figcaption>Simulated BMS demonstrator · video playback</figcaption>
+        </figure>
         <div class="output-table-wrap"><table class="output-table"><caption>Compare the outputs</caption><thead><tr><th scope="col">Method</th><th scope="col">Ready</th><th scope="col">SoC output</th><th scope="col">Latency*</th></tr></thead><tbody>
-          <tr><th scope="row">INTERA AI</th><td id="aiCount">0 / 4</td><td id="aiOutput">Pending</td><td id="aiLatency">—</td></tr>
-          <tr><th scope="row">Conventional Cloud</th><td id="cloudCount">0 / 4</td><td id="cloudOutput">Pending</td><td id="cloudLatency">—</td></tr>
+          <tr><th scope="row">INTERA AI</th><td>4 / 4</td><td>90.0% SoC</td><td>0.20 ms</td></tr>
+          <tr><th scope="row">Conventional Cloud</th><td>4 / 4</td><td>90.0% SoC</td><td>2000 ms · 2.0 s</td></tr>
         </tbody></table></div>
       </section>
       <aside class="cells-column" aria-labelledby="cellsHeading">
@@ -57,6 +52,6 @@
     </div></section>
     <footer><div class="flow"><span>Cell sensing</span><b>→</b><span>INTERA AI</span><b>→</b><span>Battery intelligence</span></div><small>*Simulated dashboard, not a connected test bench. Cell readings and accuracy values reproduce the supplied sketch; they are not validated measurements. Chart comparisons are illustrative.</small></footer>
   </main>
-  <script src="bms.js?v=bms-speed-v3"></script>
+  <script src="bms.js?v=bms-video-v1"></script>
 </body>
 </html>
