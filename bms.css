@@ -36,12 +36,14 @@ i.legend-ai { border-color: #52d6ff; } i.legend-reference { border-color: #e1ebf
 .chart-readings strong { font-size: 24px; color: #d9f3ff; font-weight: 500; font-variant-numeric: tabular-nums; }
 .chart-note { font-size: 10px; line-height: 1.5; margin: 18px 0 0; color: #8aa5bf; }
 .cells-column { display: flex; flex-direction: column; gap: 16px; }
+.cells-heading { display: flex; justify-content: space-between; align-items: end; gap: 12px; }
 .cells-heading h2 { font-size: 20px; margin-top: 7px; }
+.cell-rotation-toggle { flex: none; padding: 7px 9px; border: 1px solid #286690; border-radius: 3px; background: #06233f; color: #b9dbf2; font: inherit; font-size: 10px; cursor: pointer; }
+.cell-rotation-toggle:hover, .cell-rotation-toggle:focus-visible { border-color: #52d6ff; color: #fff; }
 .cell-card { flex: 1; padding: 20px 24px; position: relative; }
 .cell-heading, .cell-heading h3 { display: flex; align-items: center; gap: 10px; }
 .cell-heading { justify-content: space-between; }
 .cell-heading h3 { font-size: 16px; font-weight: 500; margin: 0; }
-.cell-icon { display: inline-block; width: 13px; height: 21px; border: 1px solid #52d6ff; border-radius: 2px; box-shadow: inset 0 -12px #008ddf33; }
 .cell-state { font-size: 9px; color: #8fbbd9; letter-spacing: .05em; }
 .cell-voltage { font-size: 42px; font-weight: 600; letter-spacing: -.035em; margin: 16px 0; }
 .cell-voltage small { font-size: 17px; font-weight: 400; color: var(--muted); }
@@ -50,14 +52,15 @@ i.legend-ai { border-color: #52d6ff; } i.legend-reference { border-color: #e1ebf
 .cell-readings dt { color: var(--muted); font-size: 11px; margin-bottom: 8px; }
 .cell-readings dd { margin: 0; font-size: 21px; font-variant-numeric: tabular-nums; }
 .cell-readings small { color: var(--muted); font-size: 12px; }
-.accuracy-heading { border-top: 1px solid var(--line); padding-top: 12px; display: flex; justify-content: space-between; align-items: center; }
-.accuracy-heading span { color: var(--muted); font-size: 11px; }
-.accuracy-heading strong { color: #70d6ff; font-size: 24px; font-weight: 500; }
-.accuracy-heading small { font-size: 12px; }
-.cell-card meter { display: block; width: 100%; height: 6px; margin-top: 10px; appearance: none; background: #103356; border: 0; }
-.cell-card meter::-webkit-meter-bar { background: #103356; border: 0; border-radius: 0; }
-.cell-card meter::-webkit-meter-optimum-value { background: #39baff; }
-.cell-card meter::-moz-meter-bar { background: #39baff; }
+.soc-heading { border-top: 1px solid var(--line); padding-top: 12px; }
+.soc-heading > span { color: #f2f8ff; font-size: 11px; }
+.battery-gauge { display: block; width: calc(100% + 12px); height: auto; margin: 14px -6px 0; overflow: visible; }
+.battery-shell { fill: #04182d; stroke: #35718e; stroke-width: 2; }
+.battery-terminal { fill: #35718e; }
+.battery-well { fill: #103356; }
+.battery-level { fill: #40de83; filter: drop-shadow(0 0 4px #28d97977); transform-box: fill-box; transform-origin: left center; transition: transform .9s ease-in-out; }
+.battery-value { fill: #fff; stroke: #04182d; stroke-width: 2px; paint-order: stroke fill; font-size: 20px; font-weight: 700; font-variant-numeric: tabular-nums; text-anchor: middle; dominant-baseline: middle; pointer-events: none; }
+@media (prefers-reduced-motion: reduce) { .battery-level { transition: none; } }
 .insights-section { margin-top: 32px; }
 .insights-heading { margin-bottom: 18px; }
 .insights-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; }
@@ -82,9 +85,7 @@ i.legend-ai { border-color: #52d6ff; } i.legend-reference { border-color: #e1ebf
 .cell-c12 .cell-voltage,
 .cell-c12 .cell-voltage small,
 .cell-c12 .cell-readings dd,
-.cell-c12 .cell-readings small,
-.cell-c12 .accuracy-heading strong,
-.cell-c12 .accuracy-heading small { color: #ff5a65; }
+.cell-c12 .cell-readings small { color: #ff5a65; }
 .output-table-wrap { overflow-x: auto; margin-top: 22px; }
 .output-table { width: 100%; border-collapse: collapse; font-size: 12px; text-align: left; }
 .output-table caption { text-align: left; color: #edf7ff; font-size: 17px; margin-bottom: 14px; }
