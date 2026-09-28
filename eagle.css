@@ -33,14 +33,13 @@
 .dial-tick.major { stroke: #90b7d5; stroke-width: 1.5; }
 .dial-label { fill: #93b0c9; font: 11px Arial, sans-serif; text-anchor: middle; dominant-baseline: middle; }
 .dial-label.target { fill: var(--dial-color); }
+.speed-label { fill: #d8e9f7; font-size: 12px; font-weight: 600; paint-order: stroke fill; stroke: #031225; stroke-width: 3px; stroke-linejoin: round; }
 .dial-value { fill: var(--dial-color); font: 600 30px Arial, sans-serif; letter-spacing: -.03em; text-anchor: middle; font-variant-numeric: tabular-nums; }
 .dial-unit { fill: #87a6c0; font: 9px Arial, sans-serif; text-anchor: middle; letter-spacing: 1.6px; }
 .dial-unit-primary { fill: var(--dial-color); font-size: 12px; font-weight: 600; letter-spacing: 1.2px; }
-.time-label { fill: var(--dial-color); font-size: 10px; }
 .gauge-needle { fill: var(--dial-color); }
 .gauge-hub { fill: #09253e; stroke: var(--dial-color); stroke-width: 2; }
 .needle-motion { --needle-sweep: 240deg; transform-origin: 180px 155px; animation: needleProgress 17s linear infinite; will-change: transform; }
-.cpu-panel .needle-motion { --needle-sweep: 135deg; }
 @keyframes needleProgress {
   0% { transform: rotate(0deg); }
   35.294% { transform: rotate(var(--needle-sweep)); }
@@ -71,4 +70,4 @@
   .scale-note { grid-template-columns: 1fr; gap: 10px; }
   .eagle-page .subtitle { max-width: 170px; line-height: 1.6; }
 }
-@media (prefers-reduced-motion: reduce) { .needle-motion { animation: none; } }
+@media (prefers-reduced-motion: reduce) { .needle-motion { animation: none; transform: rotate(var(--needle-sweep)); } }
