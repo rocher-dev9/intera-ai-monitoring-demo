@@ -3,7 +3,9 @@ const respRateEl = document.getElementById("respRate");
 const dataHeartRateEl = document.getElementById("dataHeartRate");
 const dataRespRateEl = document.getElementById("dataRespRate");
 const signalQualityEl = document.getElementById("signalQuality");
+const qualityProgress = document.getElementById("signalQualityProgress");
 const qualityBar = document.getElementById("qualityBar");
+let currentSignalQuality = 94;
 const sensorText = document.getElementById("sensorText");
 const fullscreenBtn = document.getElementById("fullscreenBtn");
 
@@ -18,6 +20,7 @@ function randomAround(base, variation) {
 function updateVitals() {
   const heartRate = randomAround(95, 25);
   const signalQuality = randomAround(94, 2);
+  currentSignalQuality = signalQuality;
   const rr = respirationRate.value;
 
   heartRateEl.textContent = heartRate;
@@ -30,9 +33,6 @@ function updateVitals() {
   respRateEl.classList.toggle("high", rr > 20);
   dataRespRateEl.classList.toggle("high", rr > 20);
 
-  signalQualityEl.textContent = signalQuality;
-  qualityBar.style.width = `${signalQuality}%`;
-
   // Let the demo show the high respiration state after the normal baseline.
   respirationRate.value = Math.min(rr + 1, 22);
 }
@@ -42,35 +42,54 @@ setInterval(updateVitals, 1400);
 const EDGE_DURATION_MS = 3000;
 const CLOUD_DURATION_MS = 7000;
 
-function createProcessor(name, duration, target) {
+function createProcessor(name, duration) {
   const nodes = [...document.querySelectorAll(`#${name}Network .node`)];
   return {
+    name,
     nodes,
     duration,
-    target,
     status: document.getElementById(`${name}Status`),
-    load: document.getElementById(`${name}LoadFill`),
     progress: document.getElementById(`${name}LoadProgress`),
+    fill: document.getElementById(`${name}LoadFill`),
+    value: document.getElementById(`${name}SignalQuality`),
+    cycleIndex: -1,
+    targetQuality: 94,
   };
 }
 
-const edgeProcessor = createProcessor("edge", EDGE_DURATION_MS, 90);
-const cloudProcessor = createProcessor("cloud", CLOUD_DURATION_MS, 95);
+const edgeProcessor = createProcessor("edge", EDGE_DURATION_MS);
+const cloudProcessor = createProcessor("cloud", CLOUD_DURATION_MS);
 
 function resetProcessor(processor) {
-  processor.load.style.width = "0%";
-  processor.progress.setAttribute("aria-valuenow", "0");
   processor.status.textContent = "Processing";
   processor.nodes.forEach(node => node.classList.remove("active"));
 }
 
 function renderProcessor(processor, elapsed) {
+  const cycleIndex = Math.floor(elapsed / processor.duration);
+  if (cycleIndex !== processor.cycleIndex) {
+    processor.cycleIndex = cycleIndex;
+    processor.targetQuality = currentSignalQuality;
+    processor.value.textContent = processor.targetQuality;
+    const isExcellent = processor.targetQuality >= 95;
+    processor.value.classList.toggle("signal-excellent", isExcellent);
+    processor.fill.classList.toggle("signal-excellent", isExcellent);
+    if (processor.name === "edge") {
+      signalQualityEl.textContent = processor.targetQuality;
+      signalQualityEl.classList.toggle("signal-excellent", isExcellent);
+      qualityBar.classList.toggle("signal-excellent", isExcellent);
+    }
+  }
   const cycleElapsed = elapsed % processor.duration;
   const progress = cycleElapsed / processor.duration;
-  const value = Math.round(progress * processor.target);
-  processor.load.style.width = `${value}%`;
-  processor.progress.setAttribute("aria-valuenow", String(value));
   processor.status.textContent = "Processing";
+  const displayedQuality = processor.targetQuality * progress;
+  processor.fill.style.width = `${displayedQuality}%`;
+  processor.progress.setAttribute("aria-valuenow", String(Math.round(displayedQuality)));
+  if (processor.name === "edge") {
+    qualityBar.style.width = `${displayedQuality}%`;
+    qualityProgress.setAttribute("aria-valuenow", String(Math.round(displayedQuality)));
+  }
 
   const activeIndex = processor.nodes.length
     ? Math.floor(progress * processor.nodes.length) % processor.nodes.length
