@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>INTERA · AI Powered BMS</title>
   <link rel="stylesheet" href="styles.css?v=interfaces-v2" />
-  <link rel="stylesheet" href="bms.css?v=bms-video-v1" />
+  <link rel="stylesheet" href="bms.css?v=bms-battery-v4" />
 </head>
 <body class="bms-page">
   <main class="demo-shell">
@@ -40,18 +40,42 @@
         </tbody></table></div>
       </section>
       <aside class="cells-column" aria-labelledby="cellsHeading">
-        <div class="cells-heading"><div class="section-label"><span class="section-number">02</span> CELL TELEMETRY</div><h2 id="cellsHeading">Inside the pack</h2></div>
-        <article class="card cell-card"><div class="cell-heading"><h3><span class="cell-icon" aria-hidden="true"></span>Cell C10</h3><span class="cell-state">Sample 01</span></div><div class="cell-voltage">3.6 <small>V</small></div><dl class="cell-readings"><div><dt>Temperature</dt><dd>39.5 <small>°C</small></dd></div><div><dt>Current</dt><dd>36.7 <small>A</small></dd></div></dl><div class="accuracy-heading"><span>Model accuracy</span><strong>90<small>%</small></strong></div><meter min="0" max="100" value="90" aria-label="Cell C10 illustrative model accuracy">90%</meter></article>
-        <article class="card cell-card cell-c12"><div class="cell-heading"><h3><span class="cell-icon" aria-hidden="true"></span>Cell C12</h3><span class="cell-state">Sample 02</span></div><div class="cell-voltage">3.4 <small>V</small></div><dl class="cell-readings"><div><dt>Temperature</dt><dd>38.0 <small>°C</small></dd></div><div><dt>Current</dt><dd>35.2 <small>A</small></dd></div></dl><div class="accuracy-heading"><span>Model accuracy</span><strong>87<small>%</small></strong></div><meter min="0" max="100" value="87" aria-label="Cell C12 illustrative model accuracy">87%</meter></article>
+        <div class="cells-heading"><div><div class="section-label"><span class="section-number">02</span> CELL TELEMETRY</div><h2 id="cellsHeading">Inside the pack</h2></div><button class="cell-rotation-toggle" id="toggleCellRotation" type="button" aria-pressed="false">Pause rotation</button></div>
+        <article class="card cell-card" aria-label="Cell C10 telemetry">
+          <div class="cell-heading"><h3>Cell C10</h3><span class="cell-state" id="c10Sample">Sample 01 / 05</span></div>
+          <div class="cell-voltage"><span id="c10Voltage">3.6</span> <small>V</small></div>
+          <dl class="cell-readings"><div><dt>Temperature</dt><dd><span id="c10Temperature">38.5</span> <small>°C</small></dd></div><div><dt>Current</dt><dd><span id="c10Current">40.2</span> <small>A</small></dd></div></dl>
+          <div class="soc-heading"><span>State of charge (SoC)</span></div>
+          <svg class="battery-gauge" id="c10Battery" viewBox="0 0 256 98" role="progressbar" aria-label="Cell C10 state of charge" aria-valuemin="0" aria-valuemax="100" aria-valuenow="64.3">
+            <rect class="battery-shell" x="1.5" y="2.5" width="240" height="93" rx="6" />
+            <rect class="battery-terminal" x="243" y="28" width="11" height="42" rx="2" />
+            <rect class="battery-well" x="8" y="12" width="226" height="74" rx="3" />
+            <rect class="battery-level" id="c10BatteryLevel" x="8" y="12" width="226" height="74" rx="3" style="transform: scaleX(.643)" />
+            <text class="battery-value" id="c10Soc" x="121" y="49" aria-hidden="true">64.3%</text>
+          </svg>
+        </article>
+        <article class="card cell-card cell-c12" aria-label="Cell C12 telemetry">
+          <div class="cell-heading"><h3>Cell C12</h3><span class="cell-state" id="c12Sample">Sample 01 / 05</span></div>
+          <div class="cell-voltage"><span id="c12Voltage">3.4</span> <small>V</small></div>
+          <dl class="cell-readings"><div><dt>Temperature</dt><dd><span id="c12Temperature">38.6</span> <small>°C</small></dd></div><div><dt>Current</dt><dd><span id="c12Current">37.6</span> <small>A</small></dd></div></dl>
+          <div class="soc-heading"><span>State of charge (SoC)</span></div>
+          <svg class="battery-gauge" id="c12Battery" viewBox="0 0 256 98" role="progressbar" aria-label="Cell C12 state of charge" aria-valuemin="0" aria-valuemax="100" aria-valuenow="59.3">
+            <rect class="battery-shell" x="1.5" y="2.5" width="240" height="93" rx="6" />
+            <rect class="battery-terminal" x="243" y="28" width="11" height="42" rx="2" />
+            <rect class="battery-well" x="8" y="12" width="226" height="74" rx="3" />
+            <rect class="battery-level" id="c12BatteryLevel" x="8" y="12" width="226" height="74" rx="3" style="transform: scaleX(.593)" />
+            <text class="battery-value" id="c12Soc" x="121" y="49" aria-hidden="true">59.3%</text>
+          </svg>
+        </article>
       </aside>
     </div>
     <section class="insights-section" aria-labelledby="insightsHeading"><div class="insights-heading"><div><div class="section-label"><span class="section-number">03</span> BATTERY INTELLIGENCE</div><h2 id="insightsHeading">Beyond the measurement</h2></div><span class="summary-note">Illustrative analysis</span></div><div class="insights-grid">
       <article class="card insight-card"><span class="insight-index">01 / RESPONSE SPEED</span><h3>Output available earlier</h3><p>Compare the same battery output across INTERA AI and Conventional Cloud.</p><div class="insight-result"><span>INTERA AI final latency</span><strong>30 ms</strong></div></article>
-      <article class="card insight-card"><span class="insight-index">02 / FAILURE PREDICTION</span><h3>Cell imbalance indicator</h3><p>C10 and C12 differ by 0.20 V in this sample. Track the spread to investigate divergence.</p><div class="insight-result"><span>Prediction status</span><strong class="text-result">Demo only</strong></div></article>
+      <article class="card insight-card"><span class="insight-index">02 / FAILURE PREDICTION</span><h3>Cell imbalance indicator</h3><p>C10 and C12 differ by <span id="cellSpread">0.20 V</span> in this sample. Track the spread to investigate divergence.</p><div class="insight-result"><span>Prediction status</span><strong class="text-result">Demo only</strong></div></article>
       <article class="card insight-card"><span class="insight-index">03 / HEALTH</span><h3>Battery health monitoring</h3><p>Voltage, temperature and current provide inputs for monitoring degradation over time.</p><div class="insight-result"><span>State of health</span><strong class="text-result">Not estimated</strong></div></article>
     </div></section>
-    <footer><div class="flow"><span>Cell sensing</span><b>→</b><span>INTERA AI</span><b>→</b><span>Battery intelligence</span></div><small>Simulated dashboard, not a connected test bench. Cell readings and accuracy values reproduce the supplied sketch; they are not validated measurements. Output comparisons are illustrative.</small></footer>
+    <footer><div class="flow"><span>Cell sensing</span><b>→</b><span>INTERA AI</span><b>→</b><span>Battery intelligence</span></div><small>Simulated dashboard, not a connected test bench. Cell readings and SoC values reproduce the supplied sample table; they are not validated measurements. Output comparisons are illustrative.</small></footer>
   </main>
-  <script src="bms.js?v=bms-video-v1"></script>
+  <script src="bms.js?v=bms-battery-v3"></script>
 </body>
 </html>
