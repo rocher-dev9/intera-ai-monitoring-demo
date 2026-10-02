@@ -38,32 +38,27 @@ document.querySelectorAll('.speed-gauge').forEach(svg => {
   svgElement(svg, 'circle', { cx: 180, cy: 155, r: 138, fill: '#031225', stroke: '#16354f', 'stroke-width': 1 });
   svgElement(svg, 'path', { d: arcBetween(-135, 135, 125), class: 'gauge-track' });
   svgElement(svg, 'path', { d: arcBetween(startAngle, targetAngle, 125), class: 'gauge-arc' });
-  for (let decade = 0; decade < scaleStops.length - 1; decade++) {
-    for (let multiplier = 2; multiplier <= 9; multiplier++) {
-      const angle = angleFor(scaleStops[decade].value * multiplier);
-      const outer = pointAt(angle, 117);
-      const inner = pointAt(angle, 111);
-      svgElement(svg, 'line', { x1: inner.x, y1: inner.y, x2: outer.x, y2: outer.y, class: 'dial-tick' });
-    }
-  }
-  scaleStops.forEach(({ value }) => {
-    const angle = angleFor(value);
+  const tickCount = 40;
+  const majorTicks = new Set(scaleStops.map(stop => Math.round(stop.position * tickCount)));
+  for (let tick = 0; tick <= tickCount; tick++) {
+    const angle = -135 + tick / tickCount * 270;
+    const major = majorTicks.has(tick);
     const outer = pointAt(angle, 117);
-    const inner = pointAt(angle, 106);
-    svgElement(svg, 'line', { x1: inner.x, y1: inner.y, x2: outer.x, y2: outer.y, class: 'dial-tick major' });
-  });
+    const inner = pointAt(angle, major ? 106 : 111);
+    svgElement(svg, 'line', { x1: inner.x, y1: inner.y, x2: outer.x, y2: outer.y, class: major ? 'dial-tick major' : 'dial-tick' });
+  }
   const rotation = svgElement(svg, 'g', { transform: `rotate(${startAngle} 180 155)` });
   const needle = svgElement(rotation, 'g', { class: 'needle-motion' });
   needle.style.setProperty('--needle-sweep', `${targetAngle - startAngle}deg`);
-  svgElement(needle, 'path', { d: 'M 176 171 L 179 42 L 182 42 L 184 171 Z', class: 'gauge-needle' });
+  svgElement(needle, 'path', { d: 'M 176 164 L 178 83 L 180 79 L 182 83 L 184 164 Z', class: 'gauge-needle' });
   svgElement(svg, 'circle', { cx: 180, cy: 155, r: 9, class: 'gauge-hub' });
   svgElement(svg, 'circle', { cx: 180, cy: 155, r: 3, fill: '#bdeaff' });
   scaleStops.forEach(({ value }) => {
-    const at = pointAt(angleFor(value), 92);
+    const at = pointAt(angleFor(value), 98);
     svgElement(svg, 'text', { x: at.x, y: at.y, class: 'dial-label speed-label' }, `${value}×`);
   });
-  svgElement(svg, 'text', { x: 180, y: 220, class: 'dial-value' }, `${target}×`);
-  svgElement(svg, 'text', { x: 180, y: 242, class: 'dial-unit dial-unit-primary' }, 'RELATIVE SPEED');
+  svgElement(svg, 'text', { x: 180, y: 236, class: 'dial-value' }, `${target}×`);
+  svgElement(svg, 'text', { x: 180, y: 258, class: 'dial-unit dial-unit-primary' }, 'RELATIVE SPEED');
 });
 const motionButton = document.getElementById('motionToggle');
 motionButton.addEventListener('click', () => {
