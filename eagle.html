@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>INTERA · Eagle Accelerator</title>
   <link rel="stylesheet" href="styles.css?v=interfaces-v2" />
-  <link rel="stylesheet" href="eagle.css?v=eagle-v17" />
+  <link rel="stylesheet" href="eagle.css?v=eagle-v19" />
 </head>
 <body class="eagle-page">
   <main class="demo-shell">
@@ -30,9 +30,9 @@
       <article class="gauge-panel cpu-panel"><div class="gauge-heading"><h3>CPU</h3><span>BASELINE</span></div><svg class="speed-gauge" data-tone="cpu" data-scale="relative" data-value="1" role="img" aria-label="Configuration 2 CPU: 1 times baseline. Marks on the dial: 0.1 at 0%, 1 at 20%, 10 at 35%, 100 at 50%, and 1000 times at 100%." viewBox="0 0 360 320"></svg><p class="gauge-caption">CPU · RELATIVE SPEED</p></article>
       <article class="gauge-panel accelerator-panel"><div class="gauge-heading"><h3>EAGLE <small>ACC</small></h3><span>ACCELERATED</span></div><svg class="speed-gauge" data-tone="accelerator" data-scale="relative" data-value="25" role="img" aria-label="Configuration 2 Eagle accelerator: 25 times the CPU baseline. Marks on the dial: 0.1 at 0%, 1 at 20%, 10 at 35%, 100 at 50%, and 1000 times at 100%." viewBox="0 0 360 320"></svg><p class="gauge-caption">EAGLE ACC · RELATIVE SPEED</p></article>
     </section>
-    <div class="scale-note"><span class="section-label">READING THE GAUGES</span><p>Marks sit at 0%, 20%, 35%, 50% and 100% of the dial sweep for 0.1×, 1×, 10×, 100× and 1000×. All four needles start at 0.1×, move together to their values, return, hold for five seconds, and restart. CPU is 1×; EAGLE ACC is 30× and 25×.</p></div>
+    <div class="scale-note"><span class="section-label">READING THE GAUGES</span><p>Marks sit at 0%, 20%, 35%, 50% and 100% of the dial sweep for 0.1×, 1×, 10×, 100× and 1000×. All four needles move together from the scale minimum to their values, briefly shake around them, return to the minimum, wait two seconds, and restart. CPU is 1×; EAGLE ACC is 30× and 25×.</p></div>
     <footer><div class="flow"><span>CPU baseline</span><b>→</b><span>Near memory computing</span><b>→</b><span>Eagle acceleration</span></div><small>Values reproduce the supplied sketch; this is a visual demo, not a live benchmark. Energy figures were not supplied.</small></footer>
   </main>
-  <script src="eagle.js?v=eagle-v17"></script>
+  <script src="eagle.js?v=eagle-v20"></script>
 </body>
 </html>
