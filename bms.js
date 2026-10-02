@@ -13,13 +13,18 @@ document.addEventListener('fullscreenchange', () => {
   fullscreen.textContent = document.fullscreenElement ? 'Exit fullscreen' : 'Fullscreen';
 });
 
-const cellSamples = [
+const sourceCellSamples = [
   { c10: { voltage: 3.6, temperature: 38.5, current: 40.2, soc: 64.3 }, c12: { voltage: 3.4, temperature: 38.6, current: 37.6, soc: 59.3 } },
   { c10: { voltage: 3.6, temperature: 36.5, current: 38.1, soc: 59.3 }, c12: { voltage: 3.3, temperature: 40.6, current: 37.1, soc: 54.3 } },
   { c10: { voltage: 3.5, temperature: 34.5, current: 36.5, soc: 54.3 }, c12: { voltage: 3.5, temperature: 42.6, current: 36.6, soc: 49.3 } },
   { c10: { voltage: 3.7, temperature: 34.7, current: 33.9, soc: 74.3 }, c12: { voltage: 3.4, temperature: 44.6, current: 36.1, soc: 44.3 } },
   { c10: { voltage: 3.6, temperature: 34.5, current: 36.9, soc: 94.3 }, c12: { voltage: 3.2, temperature: 46.6, current: 35.6, soc: 39.3 } },
 ];
+
+// Keep every supplied reading intact; only pair each cell's samples by charge level.
+const c10DischargeSamples = sourceCellSamples.map(sample => sample.c10).sort((a, b) => b.soc - a.soc);
+const c12DischargeSamples = sourceCellSamples.map(sample => sample.c12).sort((a, b) => b.soc - a.soc);
+const cellSamples = c10DischargeSamples.map((c10, index) => ({ c10, c12: c12DischargeSamples[index] }));
 
 const cellFields = Object.fromEntries(['c10', 'c12'].map(name => [name, {
   sample: document.getElementById(`${name}Sample`),
