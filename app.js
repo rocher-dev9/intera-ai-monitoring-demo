@@ -5,7 +5,6 @@ const dataRespRateEl = document.getElementById("dataRespRate");
 const signalQualityEl = document.getElementById("signalQuality");
 const qualityProgress = document.getElementById("signalQualityProgress");
 const qualityBar = document.getElementById("qualityBar");
-let currentSignalQuality = 94;
 const sensorText = document.getElementById("sensorText");
 const fullscreenBtn = document.getElementById("fullscreenBtn");
 
@@ -19,8 +18,6 @@ function randomAround(base, variation) {
 
 function updateVitals() {
   const heartRate = randomAround(95, 25);
-  const signalQuality = randomAround(94, 2);
-  currentSignalQuality = signalQuality;
   const rr = respirationRate.value;
 
   heartRateEl.textContent = heartRate;
@@ -41,6 +38,11 @@ setInterval(updateVitals, 1400);
 
 const EDGE_DURATION_MS = 3000;
 const CLOUD_DURATION_MS = 7000;
+const signalQualitySamples = [95, 93, 96, 94, 92, 95, 94, 96, 93, 92, 95, 94];
+
+function qualityForSample(index) {
+  return signalQualitySamples[index % signalQualitySamples.length];
+}
 
 function createProcessor(name, duration) {
   const nodes = [...document.querySelectorAll(`#${name}Network .node`)];
@@ -69,16 +71,20 @@ function renderProcessor(processor, elapsed) {
   const cycleIndex = Math.floor(elapsed / processor.duration);
   if (cycleIndex !== processor.cycleIndex) {
     processor.cycleIndex = cycleIndex;
-    processor.targetQuality = currentSignalQuality;
-    processor.value.textContent = processor.targetQuality;
-    const isExcellent = processor.targetQuality >= 95;
-    processor.value.classList.toggle("signal-excellent", isExcellent);
-    processor.fill.classList.toggle("signal-excellent", isExcellent);
-    if (processor.name === "edge") {
-      signalQualityEl.textContent = processor.targetQuality;
-      signalQualityEl.classList.toggle("signal-excellent", isExcellent);
-      qualityBar.classList.toggle("signal-excellent", isExcellent);
+    if (cycleIndex > 0) {
+      const completedQuality = qualityForSample(cycleIndex - 1);
+      const isExcellent = completedQuality >= 95;
+      processor.value.textContent = completedQuality;
+      processor.value.classList.toggle("signal-excellent", isExcellent);
+      if (processor.name === "edge") {
+        signalQualityEl.textContent = completedQuality;
+        signalQualityEl.classList.toggle("signal-excellent", isExcellent);
+      }
     }
+    processor.targetQuality = qualityForSample(cycleIndex);
+    const targetIsExcellent = processor.targetQuality >= 95;
+    processor.fill.classList.toggle("signal-excellent", targetIsExcellent);
+    if (processor.name === "edge") qualityBar.classList.toggle("signal-excellent", targetIsExcellent);
   }
   const cycleElapsed = elapsed % processor.duration;
   const progress = cycleElapsed / processor.duration;
@@ -97,10 +103,12 @@ function renderProcessor(processor, elapsed) {
   processor.nodes.forEach((node, index) => node.classList.toggle("active", index === activeIndex));
 }
 
-function animateProcessor(processor) {
+function animateProcessors() {
   const startedAt = performance.now();
   function frame(now) {
-    renderProcessor(processor, Math.max(0, now - startedAt));
+    const elapsed = Math.max(0, now - startedAt);
+    renderProcessor(edgeProcessor, elapsed);
+    renderProcessor(cloudProcessor, elapsed);
     requestAnimationFrame(frame);
   }
   requestAnimationFrame(frame);
@@ -124,8 +132,7 @@ updateVitals();
 sensorText.textContent = "Signal acquired";
 resetProcessor(edgeProcessor);
 resetProcessor(cloudProcessor);
-animateProcessor(edgeProcessor);
-animateProcessor(cloudProcessor);
+animateProcessors();
 
 function redirectLegacyEagle() {
   if (location.hash === "#eagle") location.replace("eagle.html");
