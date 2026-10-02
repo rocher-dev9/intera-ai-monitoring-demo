@@ -39,11 +39,16 @@
 .dial-unit-primary { fill: var(--dial-color); font-size: 12px; font-weight: 600; letter-spacing: 1.2px; }
 .gauge-needle { fill: var(--dial-color); }
 .gauge-hub { fill: #09253e; stroke: var(--dial-color); stroke-width: 2; }
-.needle-motion { --needle-sweep: 240deg; transform-origin: 180px 155px; animation: needleProgress 17s linear infinite; will-change: transform; }
+.needle-motion { --needle-sweep: 240deg; transform-origin: 180px 155px; animation: needleProgress 8s linear infinite; will-change: transform; }
 @keyframes needleProgress {
   0% { transform: rotate(0deg); }
-  35.294% { transform: rotate(var(--needle-sweep)); }
-  70.588% { transform: rotate(0deg); }
+  37.5% { transform: rotate(var(--needle-sweep)); }
+  40% { transform: rotate(calc(var(--needle-sweep) + 2deg)); }
+  42.5% { transform: rotate(calc(var(--needle-sweep) - 2deg)); }
+  45% { transform: rotate(calc(var(--needle-sweep) + 1.5deg)); }
+  47.5% { transform: rotate(calc(var(--needle-sweep) - 1deg)); }
+  52.5% { transform: rotate(var(--needle-sweep)); }
+  75% { transform: rotate(0deg); }
   100% { transform: rotate(0deg); }
 }
 .eagle-page.needles-paused .needle-motion { animation-play-state: paused; }
