@@ -82,10 +82,6 @@ i.legend-ai { border-color: #52d6ff; } i.legend-reference { border-color: #e1ebf
 .speed-tag text { font: 600 14px Arial, sans-serif; fill: #87e4ff; }
 .cloud-tag rect { fill: #2b2118; stroke: #e6af6b; }
 .cloud-tag text { fill: #ffd2a0; }
-.cell-c12 .cell-voltage,
-.cell-c12 .cell-voltage small,
-.cell-c12 .cell-readings dd,
-.cell-c12 .cell-readings small { color: #ff5a65; }
 .output-table-wrap { overflow-x: auto; margin-top: 22px; }
 .output-table { width: 100%; border-collapse: collapse; font-size: 12px; text-align: left; }
 .output-table caption { text-align: left; color: #edf7ff; font-size: 17px; margin-bottom: 14px; }
