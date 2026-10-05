@@ -13,18 +13,15 @@ document.addEventListener('fullscreenchange', () => {
   fullscreen.textContent = document.fullscreenElement ? 'Exit fullscreen' : 'Fullscreen';
 });
 
-const sourceCellSamples = [
-  { c10: { voltage: 3.6, temperature: 38.5, current: 40.2, soc: 64.3 }, c12: { voltage: 3.4, temperature: 38.6, current: 37.6, soc: 59.3 } },
-  { c10: { voltage: 3.6, temperature: 36.5, current: 38.1, soc: 59.3 }, c12: { voltage: 3.3, temperature: 40.6, current: 37.1, soc: 54.3 } },
-  { c10: { voltage: 3.5, temperature: 34.5, current: 36.5, soc: 54.3 }, c12: { voltage: 3.5, temperature: 42.6, current: 36.6, soc: 49.3 } },
-  { c10: { voltage: 3.7, temperature: 34.7, current: 33.9, soc: 74.3 }, c12: { voltage: 3.4, temperature: 44.6, current: 36.1, soc: 44.3 } },
-  { c10: { voltage: 3.6, temperature: 34.5, current: 36.9, soc: 94.3 }, c12: { voltage: 3.2, temperature: 46.6, current: 35.6, soc: 39.3 } },
+// Synchronized demo snapshots. The first pair reproduces the supplied reference;
+// later pairs illustrate both cells discharging together without implying bench data.
+const cellSamples = [
+  { c10: { voltage: 3.6, temperature: 41.3, current: 37.6, soc: 87 }, c12: { voltage: 3.7, temperature: 43.0, current: 38.2, soc: 90 } },
+  { c10: { voltage: 3.6, temperature: 41.4, current: 37.4, soc: 86.4 }, c12: { voltage: 3.7, temperature: 43.1, current: 38.0, soc: 89.4 } },
+  { c10: { voltage: 3.6, temperature: 41.6, current: 37.2, soc: 85.9 }, c12: { voltage: 3.7, temperature: 43.3, current: 37.8, soc: 88.9 } },
+  { c10: { voltage: 3.5, temperature: 41.7, current: 37.1, soc: 85.3 }, c12: { voltage: 3.6, temperature: 43.4, current: 37.7, soc: 88.3 } },
+  { c10: { voltage: 3.5, temperature: 41.9, current: 36.9, soc: 84.8 }, c12: { voltage: 3.6, temperature: 43.6, current: 37.5, soc: 87.8 } },
 ];
-
-// Keep every supplied reading intact; only pair each cell's samples by charge level.
-const c10DischargeSamples = sourceCellSamples.map(sample => sample.c10).sort((a, b) => b.soc - a.soc);
-const c12DischargeSamples = sourceCellSamples.map(sample => sample.c12).sort((a, b) => b.soc - a.soc);
-const cellSamples = c10DischargeSamples.map((c10, index) => ({ c10, c12: c12DischargeSamples[index] }));
 
 const cellFields = Object.fromEntries(['c10', 'c12'].map(name => [name, {
   sample: document.getElementById(`${name}Sample`),
@@ -49,7 +46,7 @@ function showCellSample(index) {
     fields.voltage.textContent = data.voltage.toFixed(1);
     fields.temperature.textContent = data.temperature.toFixed(1);
     fields.current.textContent = data.current.toFixed(1);
-    fields.soc.textContent = `${data.soc.toFixed(1)}%`;
+    fields.soc.textContent = `${Number.isInteger(data.soc) ? data.soc : data.soc.toFixed(1)}%`;
     fields.battery.setAttribute('aria-valuenow', data.soc.toFixed(1));
     fields.batteryLevel.style.transform = `scaleX(${data.soc / 100})`;
   }
